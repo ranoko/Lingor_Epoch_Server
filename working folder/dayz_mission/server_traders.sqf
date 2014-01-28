@@ -1,5 +1,5 @@
 // DayZ Epoch TRADERS for 6
-serverTraders = ["RU_Worker1","Dr_Annie_Baker_EP1","CIV_EuroWoman01_EP1","ibr_lingorman2s","Worker2","TK_CIV_Woman03_EP1","ibr_lingorman3s","ibr_lingorman5s","ibr_lingorman4s","ibr_lingorman2","Citizen2_EP1","Worker1","RU_Madam3","Pilot","CIV_EuroMan02_EP1","CIV_EuroMan01_EP1","ibr_lingorman7s","Damsel3","Rocker4","Worker4","ibr_lingorman7","ibr_lingorman5","Citizen3_EP1","ibr_lingorman6","ibr_lingorman6s","TK_CIV_Woman02_EP1","Pilot_EP1","TK_CIV_Worker01_EP1","RU_Doctor","Functionary1","TK_CIV_Takistani04_EP1"];
+serverTraders = ["RU_Worker1","Dr_Annie_Baker_EP1","CIV_EuroWoman01_EP1","ibr_lingorman2s","Worker2","TK_CIV_Woman03_EP1","ibr_lingorman3s","ibr_lingorman5s","ibr_lingorman4","ibr_lingorman2","Citizen2_EP1","Worker1","RU_Madam3","Pilot","CIV_EuroMan02_EP1","CIV_EuroMan01_EP1","ibr_lingorman7s","Damsel3","Rocker4","Worker4","ibr_lingorman7","ibr_lingorman5","Citizen3_EP1","ibr_lingorman6","ibr_lingorman6s","TK_CIV_Woman02_EP1","Pilot_EP1","TK_CIV_Worker01_EP1","RU_Doctor","Functionary1","TK_CIV_Takistani04_EP1"];
 		// START PER TRADER CONFIG
 // Whiskey's Parts Shop
 menu_RU_Worker1 = [
@@ -16,7 +16,7 @@ menu_Dr_Annie_Baker_EP1 = [
 // Alejandria's General Supplies
 menu_CIV_EuroWoman01_EP1 = [
 	[["Backpacks",538],["Clothes",628],["Cooked Meats",630],["Drinks",601],["Packaged Food",629]],
-	[["ItemCopperBar","TrashJackDaniels",1,1,"buy","Empty Whiskey Bottle","Copper Bar",101]],
+	[["ItemTinBar","TrashJackDaniels",1,1,"buy","Empty Whiskey Bottle","Tin Bar",101]],
 	"friendly"
 ];
 // Blivion's Wholesale Items
@@ -34,7 +34,7 @@ menu_Worker2 = [
 // Stella's General Goods
 menu_TK_CIV_Woman03_EP1 = [
 	[["Backpacks",632],["Clothes",631],["Cooked Meats",634],["Drinks",633],["Packaged Food",635]],
-	[["ItemCopperBar","TrashJackDaniels",1,1,"buy","Empty Whiskey Bottle","Copper Bar",101]],
+	[["ItemTinBar","TrashJackDaniels",1,1,"buy","Empty Whiskey Bottle","Tin Bar",101]],
 	"neutral"
 ];
 // Clive's Wholesale
@@ -50,7 +50,7 @@ menu_ibr_lingorman5s = [
 	"neutral"
 ];
 // Juan's Tour Boats
-menu_ibr_lingorman4s = [
+menu_ibr_lingorman4 = [
 	[["Boats Unarmed",672]],
 	[],
 	"neutral"
@@ -76,7 +76,7 @@ menu_Worker1 = [
 // Bag Lady Gina
 menu_RU_Madam3 = [
 	[["Backpacks",496],["Clothes",497],["Cooked Meats",580],["Drinks",498],["Packaged Food",579]],
-	[["ItemCopperBar","TrashJackDaniels",1,1,"buy","Empty Whiskey Bottle","Copper Bar",101]],
+	[["ItemTinBar","TrashJackDaniels",1,1,"buy","Empty Whiskey Bottle","Tin Bar",101]],
 	"neutral"
 ];
 // Chip's Choppers
@@ -106,7 +106,7 @@ menu_ibr_lingorman7s = [
 // Tina's Tarts
 menu_Damsel3 = [
 	[["Cooked Meats",690],["Drinks",691],["Packaged Food",692]],
-	[["ItemCopperBar","TrashJackDaniels",1,1,"buy","Empty Whiskey Bottle","Copper Bar",101]],
+	[["ItemTinBar","TrashJackDaniels",1,1,"buy","Empty Whiskey Bottle","Tin Bar",101]],
 	"friendly"
 ];
 // Sly's Moto
@@ -154,7 +154,7 @@ menu_ibr_lingorman6s = [
 // Samish Shop
 menu_TK_CIV_Woman02_EP1 = [
 	[["Cooked Meats",686],["Drinks",684],["Packaged Food",687]],
-	[["ItemCopperBar","TrashJackDaniels",1,1,"buy","Empty Whiskey Bottle","Copper Bar",101]],
+	[["ItemTinBar","TrashJackDaniels",1,1,"buy","Empty Whiskey Bottle","Tin Bar",101]],
 	"neutral"
 ];
 // AWOL's Planes
