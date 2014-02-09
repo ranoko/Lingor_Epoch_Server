@@ -1,4 +1,4 @@
-private ["_nul","_result","_pos","_wsDone","_dir","_block","_isOK","_countr","_objWpnTypes","_objWpnQty","_dam","_selection","_totalvehicles","_object","_idKey","_type","_ownerID","_worldspace","_intentory","_hitPoints","_fuel","_damage","_date","_key","_outcome","_vehLimit","_hiveResponse","_objectCount","_codeCount","_hour","_minute","_data","_status","_val","_traderid","_retrader","_traderData","_id","_lockable","_debugMarkerPosition","_vehicle_0"];
+private ["_nul","_result","_pos","_wsDone","_dir","_block","_isOK","_countr","_objWpnTypes","_objWpnQty","_dam","_selection","_totalvehicles","_object","_idKey","_type","_ownerID","_worldspace","_intentory","_hitPoints","_fuel","_damage","_key","_vehLimit","_hiveResponse","_objectCount","_codeCount","_data","_status","_val","_traderid","_retrader","_traderData","_id","_lockable","_debugMarkerPosition","_vehicle_0","_bQty","_vQty","_BuildingQueue","_objectQueue"];
 
 dayz_versionNo = 		getText(configFile >> "CfgMods" >> "DayZ" >> "version");
 dayz_hiveVersionNo = 	getNumber(configFile >> "CfgMods" >> "DayZ" >> "hiveVersion");
@@ -46,8 +46,7 @@ if (isServer and isNil "sm_done") then {
 	
 	_BuildingQueue = [];
 	_objectQueue = [];
-	_finalEpochObjArray = [];
-
+	
 	if ((_hiveResponse select 0) == "ObjectStreamStart") then {
 		diag_log ("HIVE: Commence Object Streaming...");
 		_key = format["CHILD:302:%1:", dayZ_instance];
@@ -65,9 +64,9 @@ if (isServer and isNil "sm_done") then {
 				_vQty = _vQty + 1;
 			};
 		};
+		diag_log ("HIVE: got " + str(_bQty) + " Epoch Objects and " + str(_vQty) + " Vehicles");
 	};
-	diag_log ("HIVE: got " + str(_bQty) + " Epoch Objects and " + str(_vQty) + " Vehicles");
-
+	
 	// # NOW SPAWN OBJECTS #
 	_totalvehicles = 0;
 	{
@@ -144,24 +143,30 @@ if (isServer and isNil "sm_done") then {
 			clearMagazineCargoGlobal  _object;
 			// _object setVehicleAmmo DZE_vehicleAmmo;
 			
+			_object setdir _dir;
+			_object setposATL _pos;
+			_object setDamage _damage;
+			
 			if ((typeOf _object) in dayz_allowedObjects) then {
-				_object addMPEventHandler ["MPKilled",{_this call object_handleServerKilled;}];
+				if (DZE_GodModeBase) then {
+					_object addEventHandler ["HandleDamage", {false}];
+					_object setDamage 0;
+				} else {
+					_object addMPEventHandler ["MPKilled",{_this call object_handleServerKilled;}];
+				};
 				// Test disabling simulation server side on buildables only.
 				_object enableSimulation false;
 				// used for inplace upgrades and lock/unlock of safe
 				_object setVariable ["OEMPos", _pos, true];
+				
 			};
-			
-			_object setdir _dir;
-			_object setposATL _pos;
-			_object setDamage _damage;
 
 			if (count _intentory > 0) then {
 				if (_type in DZE_LockedStorage) then {
 					// Fill variables with loot
-					_object setVariable ["WeaponCargo", (_intentory select 0), true];
-					_object setVariable ["MagazineCargo", (_intentory select 1), true];
-					_object setVariable ["BackpackCargo", (_intentory select 2), true];
+					_object setVariable ["WeaponCargo", (_intentory select 0)];
+					_object setVariable ["MagazineCargo", (_intentory select 1)];
+					_object setVariable ["BackpackCargo", (_intentory select 2)];
 				} else {
 
 					//Add weapons
@@ -250,41 +255,43 @@ if (isServer and isNil "sm_done") then {
 	
 
 	// preload server traders menu data into cache
-	{
-		// get tids
-		_traderData = call compile format["menu_%1;",_x];
-		if(!isNil "_traderData") then {
-			{
-				_traderid = _x select 1;
+	if !(DZE_ConfigTrader) then {
+		{
+			// get tids
+			_traderData = call compile format["menu_%1;",_x];
+			if(!isNil "_traderData") then {
+				{
+					_traderid = _x select 1;
 
-				_retrader = [];
+					_retrader = [];
 
-				_key = format["CHILD:399:%1:",_traderid];
-				_data = "HiveEXT" callExtension _key;
+					_key = format["CHILD:399:%1:",_traderid];
+					_data = "HiveEXT" callExtension _key;
 
-				//diag_log "HIVE: Request sent";
-		
-				//Process result
-				_result = call compile format ["%1",_data];
-				_status = _result select 0;
-		
-				if (_status == "ObjectStreamStart") then {
-					_val = _result select 1;
-					//Stream Objects
-					//diag_log ("HIVE: Commence Menu Streaming...");
-					call compile format["ServerTcache_%1 = [];",_traderid];
-					for "_i" from 1 to _val do {
-						_data = "HiveEXT" callExtension _key;
-						_result = call compile format ["%1",_data];
-						call compile format["ServerTcache_%1 set [count ServerTcache_%1,%2]",_traderid,_result];
-						_retrader set [count _retrader,_result];
+					//diag_log "HIVE: Request sent";
+			
+					//Process result
+					_result = call compile format ["%1",_data];
+					_status = _result select 0;
+			
+					if (_status == "ObjectStreamStart") then {
+						_val = _result select 1;
+						//Stream Objects
+						//diag_log ("HIVE: Commence Menu Streaming...");
+						call compile format["ServerTcache_%1 = [];",_traderid];
+						for "_i" from 1 to _val do {
+							_data = "HiveEXT" callExtension _key;
+							_result = call compile format ["%1",_data];
+							call compile format["ServerTcache_%1 set [count ServerTcache_%1,%2]",_traderid,_result];
+							_retrader set [count _retrader,_result];
+						};
+						//diag_log ("HIVE: Streamed " + str(_val) + " objects");
 					};
-					//diag_log ("HIVE: Streamed " + str(_val) + " objects");
-				};
 
-			} forEach (_traderData select 0);
-		};
-	} forEach serverTraders;
+				} forEach (_traderData select 0);
+			};
+		} forEach serverTraders;
+	};
 
 	//  spawn_vehicles
 	_vehLimit = MaxVehicleLimit - _totalvehicles;
@@ -334,6 +341,7 @@ if (isServer and isNil "sm_done") then {
 		_id = [] spawn server_spawnEvents;
 		// server cleanup
 		[] spawn {
+			private ["_id"];
 			sleep 200; //Sleep Lootcleanup, don't need directly cleanup on startup + fix some performance issues on serverstart
 			waitUntil {!isNil "server_spawnCleanAnimals"};
 			_id = [] execFSM "\z\addons\dayz_server\system\server_cleanup.fsm";
