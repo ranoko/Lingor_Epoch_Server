@@ -23,8 +23,8 @@ enableSentences false;
 spawnShoremode = 1; // Default = 1 (on shore)
 spawnArea = 1500; // Default = 1500
 
-MaxVehicleLimit = 300; // Default = 50
-MaxDynamicDebris = 500; // Default = 100
+MaxVehicleLimit = 400; // Default = 50
+MaxDynamicDebris = 100; // Default = 100
 dayz_MapArea = 12000; // Default = 10000
 dayz_maxLocalZombies = 40; // Default = 40
 
@@ -83,7 +83,7 @@ if (!isDedicated) then {
 	[] execVM "\z\addons\dayz_code\system\antihack.sqf";
 
 	//Lights
-	//[0,0,true,true,true,58,280,600,[0.698, 0.556, 0.419],"Generator_DZ",0.1] execVM "\z\addons\dayz_code\compile\local_lights_init.sqf";
+	[false,12] execVM "\z\addons\dayz_code\compile\local_lights_init.sqf";
 };
 #include "\z\addons\dayz_code\system\REsec.sqf"
 //Start Dynamic Weather
